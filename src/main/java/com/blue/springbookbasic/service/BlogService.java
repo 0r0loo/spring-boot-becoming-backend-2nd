@@ -2,9 +2,11 @@ package com.blue.springbookbasic.service;
 
 import com.blue.springbookbasic.domain.Article;
 import com.blue.springbookbasic.dto.AddArticleRequest;
+import com.blue.springbookbasic.dto.UpdateArticleRequest;
 import com.blue.springbookbasic.repository.BlogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,4 +29,19 @@ public class BlogService {
         return blogRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("not found: " + id));
     }
+
+    public void deleteById(long id) {
+        blogRepository.deleteById(id);
+    }
+
+    @Transactional
+    public Article update(long id, UpdateArticleRequest request) {
+        Article article = blogRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("not found: " + id));
+
+        article.update(request.getTitle(), request.getContent());
+        return article;
+    }
+
+
 }
